@@ -1,35 +1,35 @@
 import * as React from 'react';
 import { useState } from 'react';
-import './Login.css';
+import { useNavigate, Link } from 'react-router-dom';
+import '../styles/Login.css';
 
-interface LoginProps {
-  onSwitch: () => void;
-}
-
-const Login: React.FC<LoginProps> = ({ onSwitch }) => {
+const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
     try {
       const response = await fetch('http://localhost:3000/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
+
       const data = await response.json();
+
       if (data.access_token) {
         localStorage.setItem('token', data.access_token);
-        alert('Login exitoso!');
-        window.location.href = '/dashboard';
+        navigate('/'); // redirige al dashboard
       } else {
         setError(data.error || 'Error de autenticación');
       }
     } catch (err) {
-      setError('Error de conexión');
+      setError('Error de conexión con el servidor');
     }
   };
 
@@ -53,16 +53,12 @@ const Login: React.FC<LoginProps> = ({ onSwitch }) => {
         />
         <button type="submit">Entrar</button>
         {error && <div className="login-error">{error}</div>}
-        <button
-          type="button"
-          className="app-switch-btn"
-          onClick={onSwitch}
-        >
+        <Link to="/register" className="app-switch-btn">
           ¿No tienes cuenta? Regístrate
-        </button>
+        </Link>
       </form>
     </div>
   );
-}
+};
 
 export default Login;
