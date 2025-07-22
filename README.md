@@ -33,6 +33,8 @@ npm install --save-dev @types/passport-jwt @types/bcrypt
 DATABASE_URL="ubicar aqui cadena de coneccion a bd postgres sin eliminar comillar"
 
 JWT_SECRET="poner clave secreta y eliminar comillas"
+
+## Migramos la Base de datos y luego ejecutamos el servicio
  
 npx prisma migrate dev --name init
 
