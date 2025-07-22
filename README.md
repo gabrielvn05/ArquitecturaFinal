@@ -5,7 +5,9 @@ LearnPro es una aplicación fullstack compuesta por un **backend con NestJS + Pr
 ## Estructura del Proyecto
 
 learnpro/
+
 ├── learnpro-backend/ # Backend con NestJS y Prisma
+
 └── login/ # Frontend con React + Vite + TypeScript
 
 
@@ -21,18 +23,28 @@ Asegúrate de tener instalados:
 ## Instalación y Ejecución del Backend
 
 cd learnpro-backend
+
 npm install @nestjs/jwt @nestjs/passport passport passport-jwt bcrypt
+
 npm install --save-dev @types/passport-jwt @types/bcrypt
+
 npx prisma migrate dev --name init
+
 npm run start:dev
+
 cd ..
 
 ## Instalación y Ejecución del Frontend
 
 cd login
+
 npm create vite@latest login -- --template react-ts
+
 npm install
+
 npm install react-router-dom
+
 npm install --save-dev @types/react-router-dom
+
 npm run dev
 
