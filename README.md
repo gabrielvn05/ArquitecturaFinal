@@ -28,6 +28,8 @@ npm install @nestjs/jwt @nestjs/passport passport passport-jwt bcrypt
 
 npm install --save-dev @types/passport-jwt @types/bcrypt
 
+npm install --save @nestjs/swagger swagger-ui-express
+
 ## Creamos el archivo .env y agregamos lo siguiente
 
 DATABASE_URL="ubicar aqui cadena de coneccion a bd postgres sin eliminar comillar"
@@ -39,6 +41,10 @@ JWT_SECRET="poner clave secreta y eliminar comillas"
 npx prisma migrate dev --name init
 
 npm run start:dev
+
+## Documentacion swagger desde localhost
+
+http://localhost:3000/api
 
 cd ..
 
