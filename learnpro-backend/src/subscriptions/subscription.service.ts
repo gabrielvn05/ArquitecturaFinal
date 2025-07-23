@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { SubscriptionContext } from '../strategies/subscription-context';
-import { MonthlySubscriptionStrategy } from '../strategies/monthly-subscription.strategy';
-import { AnnualSubscriptionStrategy } from '../strategies/annual-subscription.strategy';
+import { SubscriptionContext } from './strategies/subscription-context';
+import { MonthlySubscriptionStrategy } from './strategies/monthly-subscription.strategy';
+import { AnnualSubscriptionStrategy } from './strategies/annual-subscription.strategy';
 
 @Injectable()
 export class SubscriptionService {
