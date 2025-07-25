@@ -28,8 +28,9 @@ body, html, #root {
   height: 100%;
   width: 100%;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
-
 
 h1 {
   font-size: 3.2em;

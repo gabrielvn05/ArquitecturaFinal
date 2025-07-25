@@ -20,6 +20,7 @@ const Home: React.FC = () => {
           <div className="dropdown">
             <span>Cursos ▾</span>
             <div className="dropdown-content">
+              <Link to="/catalog">📚 Catálogo</Link>
               <Link to="/my-courses">Mis cursos</Link>
               <Link to="/explore">Explorar</Link>
               <Link to="/courses">Crear curso</Link>
@@ -42,6 +43,14 @@ const Home: React.FC = () => {
       <main className="dashboard-main">
         <h1>Bienvenido a LearnPro</h1>
         <p>Has iniciado sesión correctamente. Selecciona una opción del menú.</p>
+        
+        <div className="featured-section">
+          <h2>🎯 Explora nuestro catálogo</h2>
+          <p>Descubre todos los cursos disponibles y encuentra el plan perfecto para ti</p>
+          <Link to="/catalog" className="cta-button">
+            Ver Catálogo de Cursos
+          </Link>
+        </div>
       </main>
     </div>
   );

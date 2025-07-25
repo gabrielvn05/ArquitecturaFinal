@@ -1,4 +1,4 @@
-import { SubscriptionStrategy } from './subscription-strategy.interface';
+import { SubscriptionStrategy, SubscriptionStrategyData } from './subscription-strategy.interface';
 
 export class SubscriptionContext {
   private strategy: SubscriptionStrategy;
@@ -11,7 +11,19 @@ export class SubscriptionContext {
     this.strategy = strategy;
   }
 
-  async create(data: any) {
+  async create(data: SubscriptionStrategyData) {
     return this.strategy.createSubscription(data);
+  }
+
+  getPrice(): number {
+    return this.strategy.calculatePrice();
+  }
+
+  getFeatures(): string[] {
+    return this.strategy.getFeatures();
+  }
+
+  calculateEndDate(startDate: Date): Date {
+    return this.strategy.calculateEndDate(startDate);
   }
 }

@@ -28,10 +28,13 @@
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.2.0",
     "@prisma/client": "^6.12.0",
+    "@types/pg": "^8.15.5",
     "bcrypt": "^6.0.0",
     "class-validator": "^0.14.2",
+    "mysql2": "^3.14.2",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
+    "pg": "^8.16.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "swagger-ui-express": "^5.0.1"
@@ -63,6 +66,7 @@
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
+    "tsx": "^4.20.3",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.20.0"
   },
@@ -82,5 +86,8 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   }
 }

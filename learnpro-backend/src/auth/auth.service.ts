@@ -22,10 +22,11 @@ export class AuthService {
         email: dto.email,
         password: hash,
         name: dto.name,
+        role: dto.role || 'STUDENT',
       },
     });
 
-    return this.generateToken(user.id, user.email, user.role);
+    return this.generateToken(user.id, user.email, user.role, user.name);
   }
 
   async login(dto: LoginDto) {
@@ -34,15 +35,20 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    return this.generateToken(user.id, user.email, user.role);
-
+    return this.generateToken(user.id, user.email, user.role, user.name);
   }
 
-  private generateToken(userId: string, email: string, role: string) {
-  const payload = { sub: userId, email, role };
-  return {
-    access_token: this.jwt.sign(payload),
-  };
-}
+  private generateToken(userId: string, email: string, role: string, name: string) {
+    const payload = { sub: userId, email, role, name };
+    return {
+      access_token: this.jwt.sign(payload),
+      user: {
+        id: userId,
+        email,
+        role,
+        name
+      }
+    };
+  }
 
 }

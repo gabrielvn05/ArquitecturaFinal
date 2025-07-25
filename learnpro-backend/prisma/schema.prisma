@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,39 +8,40 @@ datasource db {
 }
 
 model User {
-  id             String      @id @default(uuid())
-  email          String      @unique
-  password       String
-  name           String
-  role           Role        @default(STUDENT)
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
-  subscriptions  Subscription[]
-  courses        Course[]    @relation("UserCourses")
-  taughtCourses  Course[]    @relation("UserInstructor")
+  id            String         @id @default(uuid())
+  email         String         @unique
+  password      String
+  name          String
+  role          Role           @default(STUDENT)
+  isActive      Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  taughtCourses Course[]       @relation("UserInstructor")
+  subscriptions Subscription[]
+  courses       Course[]       @relation("UserCourses")
 }
 
-
 model Course {
-  id           String   @id @default(uuid())
-  title        String
-  content      String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  students     User[]   @relation("UserCourses")
-  instructor   User     @relation("UserInstructor", fields: [instructorId], references: [id])
-  instructorId String
+  id                   String           @id @default(uuid())
+  title                String
+  content              String
+  subscriptionRequired SubscriptionType @default(FREE)
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
+  instructorId         String
+  instructor           User             @relation("UserInstructor", fields: [instructorId], references: [id])
+  students             User[]           @relation("UserCourses")
 }
 
 model Subscription {
-  id          String   @id @default(uuid())
-  type        SubscriptionType
-  user        User     @relation(fields: [userId], references: [id])
-  userId      String
-  startDate   DateTime @default(now())
-  endDate     DateTime
-  active      Boolean  @default(true)
-  createdAt   DateTime @default(now())
+  id           String           @id @default(uuid())
+  type         SubscriptionType
+  userId       String
+  startDate    DateTime         @default(now())
+  endDate      DateTime
+  active       Boolean          @default(true)
+  createdAt    DateTime         @default(now())
+  user         User             @relation(fields: [userId], references: [id])
 }
 
 enum Role {
@@ -56,6 +51,7 @@ enum Role {
 }
 
 enum SubscriptionType {
+  FREE
   MONTHLY
   ANNUAL
 }

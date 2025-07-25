@@ -8,8 +8,9 @@ import {
   Delete,
   UseGuards,
   Request,
+  Query,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
@@ -21,19 +22,29 @@ export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Obtiene todos los cursos' })  // Descripción de la operación
+  @ApiOperation({ summary: 'Obtiene todos los cursos con información de acceso' })
+  @ApiQuery({ name: 'userId', required: false, description: 'ID del usuario para verificar acceso' })
   @ApiResponse({ status: 200, description: 'Lista de cursos obtenida correctamente.' })
   @ApiResponse({ status: 500, description: 'Error interno del servidor.' })
-  findAll() {
-    return this.coursesService.findAll();
+  findAll(@Query('userId') userId?: string) {
+    return this.coursesService.findAll(userId);
+  }
+
+  @Get('available/:userId')
+  @ApiOperation({ summary: 'Obtiene cursos disponibles según la suscripción del usuario' })
+  @ApiResponse({ status: 200, description: 'Lista de cursos disponibles para el usuario.' })
+  @ApiResponse({ status: 404, description: 'Usuario no encontrado.' })
+  getAvailableCourses(@Param('userId') userId: string) {
+    return this.coursesService.getAvailableCourses(userId);
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Obtiene un curso por su ID' })
+  @ApiOperation({ summary: 'Obtiene un curso por su ID con verificación de acceso' })
+  @ApiQuery({ name: 'userId', required: false, description: 'ID del usuario para verificar acceso' })
   @ApiResponse({ status: 200, description: 'Curso obtenido correctamente.' })
   @ApiResponse({ status: 404, description: 'Curso no encontrado.' })
-  findOne(@Param('id') id: string) {
-    return this.coursesService.findOne(id);
+  findOne(@Param('id') id: string, @Query('userId') userId?: string) {
+    return this.coursesService.findOne(id, userId);
   }
 
   @UseGuards(JwtAuthGuard)

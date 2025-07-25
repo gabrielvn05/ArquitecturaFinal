@@ -1,8 +1,31 @@
+/* Estilos globales para responsive */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+.app-container {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
 #root {
-  max-width: 1280px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  padding: 0;
+  text-align: left;
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .logo {
