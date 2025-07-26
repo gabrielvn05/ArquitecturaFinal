@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaPaypal, FaStripe } from 'react-icons/fa';
+import PaymentModal from '../components/PaymentModal';
+import PayPalModal from '../components/PayPalModal';
 import ProgramacionBasica from '../assets/ProgramacionBasica.jpg';
 import JavaScriptAvanzado from '../assets/JavaScript-Avanzado.png';
 import Empresarial from '../assets/Empresarial.png';
@@ -42,6 +44,9 @@ const CourseCatalogPage: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<string>('ALL');
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState<string>('STUDENT'); 
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [isPayPalModalOpen, setIsPayPalModalOpen] = useState(false);
+  const [selectedPaymentPlan, setSelectedPaymentPlan] = useState<SubscriptionPlan | null>(null); 
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -217,9 +222,40 @@ const CourseCatalogPage: React.FC = () => {
     setSelectedPlan(planType);
   };
 
-  const handlePayment = (method: string) => {
-    // Aquí puedes agregar lógica para redirigir al usuario al método de pago
-    alert(`Método de pago seleccionado: ${method}`);
+  const handlePayPalPayment = (plan: SubscriptionPlan) => {
+    setSelectedPaymentPlan(plan);
+    setIsPayPalModalOpen(true);
+  };
+
+  const handleStripePayment = (plan: SubscriptionPlan) => {
+    setSelectedPaymentPlan(plan);
+    setIsPaymentModalOpen(true);
+  };
+
+  const closePaymentModal = () => {
+    setIsPaymentModalOpen(false);
+    setSelectedPaymentPlan(null);
+  };
+
+  const closePayPalModal = () => {
+    setIsPayPalModalOpen(false);
+    setSelectedPaymentPlan(null);
+  };
+
+  const handleCoursePayPalPayment = (course: Course) => {
+    const requiredPlan = subscriptionPlans.find(plan => plan.type === course.subscriptionRequired);
+    if (requiredPlan) {
+      setSelectedPaymentPlan(requiredPlan);
+      setIsPayPalModalOpen(true);
+    }
+  };
+
+  const handleCourseStripePayment = (course: Course) => {
+    const requiredPlan = subscriptionPlans.find(plan => plan.type === course.subscriptionRequired);
+    if (requiredPlan) {
+      setSelectedPaymentPlan(requiredPlan);
+      setIsPaymentModalOpen(true);
+    }
   };
 
   const getPlanColor = (planType: string) => {
@@ -324,9 +360,9 @@ const CourseCatalogPage: React.FC = () => {
                 {plan.type !== 'FREE' && (
                   <div className="plan-action-buttons">
                     <span>Actualizar a {plan.name}</span> {/* Leyenda para actualizar */}
-                    <button className="select-plan-btn" onClick={() => handlePayment('PayPal')}><FaPaypal className="payment-logo" /> Pagar con PayPal</button> 
+                    <button className="select-plan-btn" onClick={() => handlePayPalPayment(plan)}><FaPaypal className="payment-logo" /> Pagar con PayPal</button> 
                     
-                    <button className="select-plan-btn" onClick={() => handlePayment('Stripe')}><FaStripe className="payment-logo" /> Pagar con Stripe</button>
+                    <button className="select-plan-btn" onClick={() => handleStripePayment(plan)}><FaStripe className="payment-logo" /> Pagar con Stripe</button>
                   </div>
                 )}
                 {userRole === 'ADMIN' && (
@@ -442,12 +478,14 @@ const CourseCatalogPage: React.FC = () => {
                     <button 
           className="upgrade-btn premium"
           style={{ backgroundColor: getPlanColor(course.subscriptionRequired) }}
+          onClick={() => handleCoursePayPalPayment(course)}
         >
           <FaPaypal className="payment-icon" /> Pagar con Paypal
         </button>
         <button 
           className="upgrade-btn premium"
           style={{ backgroundColor: getPlanColor(course.subscriptionRequired) }}
+          onClick={() => handleCourseStripePayment(course)}
         >
           <FaStripe className="payment-icon" /> Pagar con Stripe
         </button>
@@ -464,6 +502,24 @@ const CourseCatalogPage: React.FC = () => {
           <h3>No hay cursos disponibles para este filtro</h3>
           <p>Selecciona otro plan para ver más cursos.</p>
         </div>
+      )}
+
+      {/* Modal de PayPal directo */}
+      {selectedPaymentPlan && (
+        <PayPalModal
+          isOpen={isPayPalModalOpen}
+          onClose={closePayPalModal}
+          plan={selectedPaymentPlan}
+        />
+      )}
+
+      {/* Modal de selección de métodos (para Stripe) */}
+      {selectedPaymentPlan && (
+        <PaymentModal
+          isOpen={isPaymentModalOpen}
+          onClose={closePaymentModal}
+          plan={selectedPaymentPlan}
+        />
       )}
     </div>
   );
