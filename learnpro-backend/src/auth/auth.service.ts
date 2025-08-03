@@ -17,38 +17,42 @@ export class AuthService {
     if (existingUser) throw new UnauthorizedException('Email already in use');
 
     const hash = await bcrypt.hash(dto.password, 10);
+
     const user = await this.prisma.user.create({
       data: {
         email: dto.email,
         password: hash,
         name: dto.name,
-        role: dto.role || 'STUDENT',
+        role: dto.role ?? 'STUDENT',
       },
     });
 
-    return this.generateToken(user.id, user.email, user.role, user.name);
+    return this.generateToken(user);
   }
 
   async login(dto: LoginDto) {
     const user = await this.prisma.user.findUnique({ where: { email: dto.email } });
-    if (!user || !(await bcrypt.compare(dto.password, user.password))) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
 
-    return this.generateToken(user.id, user.email, user.role, user.name);
+    if (!user) throw new UnauthorizedException('User not found');
+    if (!(await bcrypt.compare(dto.password, user.password))) {
+      throw new UnauthorizedException('Invalid password');
+    }
+    if (!user.isActive) throw new UnauthorizedException('User is inactive');
+
+    return this.generateToken(user);
   }
 
-  private generateToken(userId: string, email: string, role: string, name: string) {
-    const payload = { sub: userId, email, role, name };
+  private generateToken(user: { id: string; email: string; role: string; name: string }) {
+    const payload = { userId: user.id, email: user.email, role: user.role, name: user.name };
+
     return {
-      access_token: this.jwt.sign(payload),
+      access_token: this.jwt.sign(payload), // ✅ payload consistente
       user: {
-        id: userId,
-        email,
-        role,
-        name
-      }
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        name: user.name,
+      },
     };
   }
-
 }

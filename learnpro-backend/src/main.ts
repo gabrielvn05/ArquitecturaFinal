@@ -5,25 +5,23 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Configuración de CORS
   app.enableCors({
     origin: 'http://localhost:5173',
     credentials: true,
   });
 
-  // Configuración de Swagger
   const config = new DocumentBuilder()
-    .setTitle('LearnPro API') // Título de la API
-    .setDescription('La API de LearnPro para la gestión de cursos y usuarios') // Descripción de la API
-    .setVersion('1.0') // Versión de la API
-    .addTag('courses') // Etiqueta para los endpoints relacionados a cursos
-    .addTag('users')   // Etiqueta para los endpoints relacionados a usuarios
+    .setTitle('LearnPro API') 
+    .setDescription('La API de LearnPro para la gestión de cursos y usuarios') 
+    .setVersion('1.0') 
+    .addTag('courses') 
+    .addTag('users')   
     .addTag('suscription')
-    .addBearerAuth()   // Si utilizas autenticación JWT
+    .addBearerAuth() 
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);  // 'api' es la ruta donde se mostrará la documentación
+  SwaggerModule.setup('api', app, document); 
 
   await app.listen(process.env.PORT ?? 3000);
 }

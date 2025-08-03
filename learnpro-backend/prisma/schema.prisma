@@ -29,19 +29,20 @@ model Course {
   createdAt            DateTime         @default(now())
   updatedAt            DateTime         @updatedAt
   instructorId         String
+  image                String?
   instructor           User             @relation("UserInstructor", fields: [instructorId], references: [id])
   students             User[]           @relation("UserCourses")
 }
 
 model Subscription {
-  id           String           @id @default(uuid())
-  type         SubscriptionType
-  userId       String
-  startDate    DateTime         @default(now())
-  endDate      DateTime
-  active       Boolean          @default(true)
-  createdAt    DateTime         @default(now())
-  user         User             @relation(fields: [userId], references: [id])
+  id        String           @id @default(uuid())
+  userId    String
+  startDate DateTime         @default(now())
+  endDate   DateTime
+  createdAt DateTime         @default(now())
+  active    Boolean          @default(true)
+  type      SubscriptionType
+  user      User             @relation(fields: [userId], references: [id])
 }
 
 enum Role {

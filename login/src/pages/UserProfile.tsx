@@ -33,37 +33,39 @@ const UserProfilePage: React.FC = () => {
   }, []);
 
   const fetchUserProfile = async () => {
-    setLoading(true);
-    try {
-      // Simular datos del perfil del usuario
-      const mockProfile: UserProfile = {
-        id: '1',
-        name: 'Juan Estudiante',
-        email: 'student@test.com',
-        role: 'STUDENT',
-        subscriptionType: 'MONTHLY',
-        joinDate: '2025-01-01',
-        bio: 'Estudiante apasionado por la tecnología y el aprendizaje continuo. Me interesa especialmente el desarrollo web y la inteligencia artificial.',
-        avatar: 'https://via.placeholder.com/150',
-        stats: {
-          coursesCompleted: 8,
-          totalHours: 120,
-          certificates: 3,
-          streak: 15
-        },
-        preferences: {
-          notifications: true,
-          emailUpdates: false,
-          publicProfile: true
-        }
-      };
-      setProfile(mockProfile);
-    } catch (error) {
-      console.error('Error fetching profile:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  setLoading(true);
+  try {
+    const token = localStorage.getItem('token'); // 👈 asumiendo que guardas el JWT aquí
+    const res = await fetch('http://localhost:3000/auth/me', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if (!res.ok) throw new Error('No se pudo obtener el perfil');
+    const data = await res.json();
+
+    // Mapear datos recibidos
+    const profileFromApi: UserProfile = {
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      role: data.role,
+      subscriptionType: data.subscriptionType || 'FREE',
+      joinDate: data.createdAt,
+      bio: data.bio || 'Sin biografía',
+      avatar: data.avatar || `https://ui-avatars.com/api/?name=${data.name}`,
+      stats: data.stats || { coursesCompleted: 0, totalHours: 0, certificates: 0, streak: 0 },
+      preferences: data.preferences || { notifications: true, emailUpdates: false, publicProfile: true }
+    };
+
+    setProfile(profileFromApi);
+  } catch (error) {
+    console.error('Error fetching profile:', error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleSaveProfile = async () => {
     if (!profile) return;
