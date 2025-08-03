@@ -304,6 +304,12 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  margin-bottom: 15px;
+}
+
+.payment-icon {
+  font-size: 20px; /* Ajusta el tamaño del ícono */
+ /* Color del ícono */
 }
 
 .select-plan-btn:hover {
@@ -577,6 +583,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   width: 100%;
+  margin-bottom: 15px;
 }
 
 .upgrade-btn.premium:hover {

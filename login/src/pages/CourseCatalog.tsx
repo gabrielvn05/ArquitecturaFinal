@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { FaPaypal, FaStripe } from 'react-icons/fa';
+import ProgramacionBasica from '../assets/ProgramacionBasica.jpg';
+import JavaScriptAvanzado from '../assets/JavaScript-Avanzado.png';
+import Empresarial from '../assets/Empresarial.png';
+import FullStack from '../assets/FullStack.jpg';
+import Machine from '../assets/Machine.png';
+import Diseno from '../assets/Diseno.jpg';
 import '../styles/CourseCatalog.css';
 
 interface Course {
@@ -34,6 +41,7 @@ const CourseCatalogPage: React.FC = () => {
   const [subscriptionPlans, setSubscriptionPlans] = useState<SubscriptionPlan[]>([]);
   const [selectedPlan, setSelectedPlan] = useState<string>('ALL');
   const [loading, setLoading] = useState(true);
+  const [userRole, setUserRole] = useState<string>('STUDENT'); 
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -60,7 +68,7 @@ const CourseCatalogPage: React.FC = () => {
           price: 0,
           rating: 4.5,
           studentsCount: 1250,
-          image: 'https://via.placeholder.com/300x200?text=Programación+Básica',
+          image: ProgramacionBasica,
           features: ['Videos HD', 'Ejercicios prácticos', 'Certificado gratuito'],
           whatYouLearn: ['Conceptos básicos de programación', 'Variables y funciones', 'Estructuras de control', 'Debugging básico']
         },
@@ -75,7 +83,7 @@ const CourseCatalogPage: React.FC = () => {
           price: 9.99,
           rating: 4.8,
           studentsCount: 856,
-          image: 'https://via.placeholder.com/300x200?text=JavaScript+Avanzado',
+          image: JavaScriptAvanzado,
           features: ['Proyectos reales', 'Mentoría 1:1', 'Acceso a comunidad', 'Certificado verificado'],
           whatYouLearn: ['ES6+ y características modernas', 'React y hooks', 'Node.js y APIs', 'Testing y deployment']
         },
@@ -90,7 +98,7 @@ const CourseCatalogPage: React.FC = () => {
           price: 99.99,
           rating: 4.9,
           studentsCount: 324,
-          image: 'https://via.placeholder.com/300x200?text=Arquitectura+Software',
+          image: Empresarial,
           features: ['Masterclasses exclusivas', 'Proyecto final personalizado', 'Revisión de código 1:1', 'Certificado profesional'],
           whatYouLearn: ['Patrones de diseño enterprise', 'Microservicios y escalabilidad', 'Clean Architecture', 'DevOps y CI/CD']
         },
@@ -105,7 +113,7 @@ const CourseCatalogPage: React.FC = () => {
           price: 9.99,
           rating: 4.7,
           studentsCount: 642,
-          image: 'https://via.placeholder.com/300x200?text=Full+Stack',
+          image: FullStack,
           features: ['Stack completo MERN', 'Deployment en producción', 'Portfolio de proyectos'],
           whatYouLearn: ['Frontend con React', 'Backend con Node.js', 'Bases de datos', 'Deployment y hosting']
         },
@@ -120,7 +128,7 @@ const CourseCatalogPage: React.FC = () => {
           price: 99.99,
           rating: 4.9,
           studentsCount: 187,
-          image: 'https://via.placeholder.com/300x200?text=Machine+Learning',
+          image: Machine,
           features: ['Datasets reales', 'GPU Cloud incluido', 'Mentoría con PhD', 'Certificado universitario'],
           whatYouLearn: ['Algoritmos de ML', 'Deep Learning', 'TensorFlow y PyTorch', 'Proyectos industriales']
         },
@@ -135,7 +143,7 @@ const CourseCatalogPage: React.FC = () => {
           price: 0,
           rating: 4.4,
           studentsCount: 934,
-          image: 'https://via.placeholder.com/300x200?text=UX+UI+Design',
+          image: Diseno,
           features: ['Herramientas profesionales', 'Portfolio incluido', 'Feedback de expertos'],
           whatYouLearn: ['Principios de UX', 'Prototipado con Figma', 'Research de usuarios', 'Testing de usabilidad']
         }
@@ -203,6 +211,15 @@ const CourseCatalogPage: React.FC = () => {
   const getFilteredCourses = () => {
     if (selectedPlan === 'ALL') return courses;
     return courses.filter(course => course.subscriptionRequired === selectedPlan);
+  };
+
+  const handleChangePlan = (planType: string) => {
+    setSelectedPlan(planType);
+  };
+
+  const handlePayment = (method: string) => {
+    // Aquí puedes agregar lógica para redirigir al usuario al método de pago
+    alert(`Método de pago seleccionado: ${method}`);
   };
 
   const getPlanColor = (planType: string) => {
@@ -302,13 +319,20 @@ const CourseCatalogPage: React.FC = () => {
                     <li key={index}>{course}</li>
                   ))}
                 </ul>
+                </div>
+               <div className="plan-actions">
+                {plan.type !== 'FREE' && (
+                  <div className="plan-action-buttons">
+                    <span>Actualizar a {plan.name}</span> {/* Leyenda para actualizar */}
+                    <button className="select-plan-btn" onClick={() => handlePayment('PayPal')}><FaPaypal className="payment-logo" /> Pagar con PayPal</button> 
+                    
+                    <button className="select-plan-btn" onClick={() => handlePayment('Stripe')}><FaStripe className="payment-logo" /> Pagar con Stripe</button>
+                  </div>
+                )}
+                {userRole === 'ADMIN' && (
+                  <button className="change-image-btn">📷 Cambiar imagen</button>  // Solo visible para admin
+                )}
               </div>
-              <button 
-                className="select-plan-btn"
-                style={{ backgroundColor: getPlanColor(plan.type) }}
-              >
-                {plan.price === 0 ? 'Comenzar Gratis' : 'Suscribirse'}
-              </button>
             </div>
           ))}
         </div>
@@ -416,11 +440,17 @@ const CourseCatalogPage: React.FC = () => {
                       <span className="plan-price">${course.price}/mes</span>
                     </div>
                     <button 
-                      className="upgrade-btn premium"
-                      style={{ backgroundColor: getPlanColor(course.subscriptionRequired) }}
-                    >
-                      Actualizar Plan
-                    </button>
+          className="upgrade-btn premium"
+          style={{ backgroundColor: getPlanColor(course.subscriptionRequired) }}
+        >
+          <FaPaypal className="payment-icon" /> Pagar con Paypal
+        </button>
+        <button 
+          className="upgrade-btn premium"
+          style={{ backgroundColor: getPlanColor(course.subscriptionRequired) }}
+        >
+          <FaStripe className="payment-icon" /> Pagar con Stripe
+        </button>
                   </div>
                 )}
               </div>

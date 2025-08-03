@@ -1,20 +1,20 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, SubscriptionType } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  // Limpiar datos existentes
+  // 🔹 Limpiar datos existentes
   await prisma.subscription.deleteMany();
   await prisma.course.deleteMany();
   await prisma.user.deleteMany();
 
-  // Crear usuarios de demo con contraseñas específicas
+  // 🔹 Crear contraseñas encriptadas
   const studentPassword = await bcrypt.hash('student123', 10);
   const adminPassword = await bcrypt.hash('admin123', 10);
   const instructorPassword = await bcrypt.hash('instructor123', 10);
 
-  // Usuario Estudiante para demo
+  // 🔹 Crear usuarios de demo
   const student = await prisma.user.create({
     data: {
       email: 'student@test.com',
@@ -24,7 +24,6 @@ async function main() {
     },
   });
 
-  // Usuario Administrador para demo
   const admin = await prisma.user.create({
     data: {
       email: 'admin@test.com',
@@ -43,52 +42,54 @@ async function main() {
     },
   });
 
-  // Crear cursos de prueba
-  const freeCourse = await prisma.course.create({
+  // ✅ Crear cursos de prueba usando prisma.course.create
+  await prisma.course.create({
     data: {
       title: 'Curso Gratuito: Introducción a la Programación',
       content: 'Este es un curso gratuito para aprender los conceptos básicos de programación.',
-      subscriptionRequired: 'FREE',
+      subscriptionRequired: SubscriptionType.FREE,
       instructorId: instructor.id,
+      image: 'https://picsum.photos/seed/free/600/400',
     },
   });
 
-  const monthlyCourse = await prisma.course.create({
+  await prisma.course.create({
     data: {
       title: 'Curso Premium: JavaScript Avanzado',
       content: 'Aprende JavaScript avanzado con ejemplos prácticos y proyectos reales.',
-      subscriptionRequired: 'MONTHLY',
+      subscriptionRequired: SubscriptionType.MONTHLY,
       instructorId: instructor.id,
+      image: 'https://picsum.photos/seed/monthly/600/400',
     },
   });
 
-  const annualCourse = await prisma.course.create({
+  await prisma.course.create({
     data: {
       title: 'Curso Exclusivo: Arquitectura de Software',
       content: 'Curso avanzado sobre patrones de diseño y arquitectura de software empresarial.',
-      subscriptionRequired: 'ANNUAL',
+      subscriptionRequired: SubscriptionType.ANNUAL,
       instructorId: instructor.id,
+      image: 'https://picsum.photos/seed/annual/600/400',
     },
   });
 
-  // Crear suscripción gratuita para el estudiante
+  // 🔹 Crear suscripciones de ejemplo
   await prisma.subscription.create({
     data: {
-      type: 'FREE',
+      type: SubscriptionType.FREE,
       userId: student.id,
       startDate: new Date(),
-      endDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 año
+      endDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
       active: true,
     },
   });
 
-  // Crear suscripción annual para el admin
   await prisma.subscription.create({
     data: {
-      type: 'ANNUAL',
+      type: SubscriptionType.ANNUAL,
       userId: admin.id,
       startDate: new Date(),
-      endDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 año
+      endDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
       active: true,
     },
   });
@@ -97,13 +98,12 @@ async function main() {
   console.log('👨‍🎓 Estudiante: student@test.com / student123');
   console.log('👑 Administrador: admin@test.com / admin123');
   console.log('👨‍🏫 Instructor: instructor@test.com / instructor123');
-  console.log('👨‍💼 Admin: admin@test.com / 123456');
   console.log('📚 Cursos creados: 3 (FREE, MONTHLY, ANNUAL)');
 }
 
 main()
   .catch((e) => {
-    console.error('Error seeding database:', e);
+    console.error('❌ Error al seedear la base de datos:', e);
     process.exit(1);
   })
   .finally(async () => {

@@ -6,6 +6,7 @@ import {
   Param,
   Put,
   Delete,
+  Patch,
   UseGuards,
   Request,
   Query,
@@ -16,7 +17,7 @@ import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { JwtAuthGuard } from '../auth/jwt.guard';
 
-@ApiTags('Courses')  // Agrupamos los endpoints bajo la etiqueta 'Courses'
+@ApiTags('Courses')
 @Controller('courses')
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
@@ -25,7 +26,6 @@ export class CoursesController {
   @ApiOperation({ summary: 'Obtiene todos los cursos con información de acceso' })
   @ApiQuery({ name: 'userId', required: false, description: 'ID del usuario para verificar acceso' })
   @ApiResponse({ status: 200, description: 'Lista de cursos obtenida correctamente.' })
-  @ApiResponse({ status: 500, description: 'Error interno del servidor.' })
   findAll(@Query('userId') userId?: string) {
     return this.coursesService.findAll(userId);
   }
@@ -33,7 +33,6 @@ export class CoursesController {
   @Get('available/:userId')
   @ApiOperation({ summary: 'Obtiene cursos disponibles según la suscripción del usuario' })
   @ApiResponse({ status: 200, description: 'Lista de cursos disponibles para el usuario.' })
-  @ApiResponse({ status: 404, description: 'Usuario no encontrado.' })
   getAvailableCourses(@Param('userId') userId: string) {
     return this.coursesService.getAvailableCourses(userId);
   }
@@ -41,18 +40,14 @@ export class CoursesController {
   @Get(':id')
   @ApiOperation({ summary: 'Obtiene un curso por su ID con verificación de acceso' })
   @ApiQuery({ name: 'userId', required: false, description: 'ID del usuario para verificar acceso' })
-  @ApiResponse({ status: 200, description: 'Curso obtenido correctamente.' })
-  @ApiResponse({ status: 404, description: 'Curso no encontrado.' })
   findOne(@Param('id') id: string, @Query('userId') userId?: string) {
     return this.coursesService.findOne(id, userId);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  @ApiBearerAuth()  // Si usas autenticación JWT, esta es la forma de documentarlo
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Crea un nuevo curso' })
-  @ApiResponse({ status: 201, description: 'Curso creado exitosamente.' })
-  @ApiResponse({ status: 400, description: 'Error en los datos enviados.' })
   create(@Body() dto: CreateCourseDto, @Request() req) {
     return this.coursesService.create(dto, req.user);
   }
@@ -61,18 +56,22 @@ export class CoursesController {
   @Put(':id')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Actualiza un curso existente' })
-  @ApiResponse({ status: 200, description: 'Curso actualizado correctamente.' })
-  @ApiResponse({ status: 404, description: 'Curso no encontrado.' })
   update(@Param('id') id: string, @Body() dto: UpdateCourseDto, @Request() req) {
     return this.coursesService.update(id, dto, req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch(':id/image')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Actualiza solo la imagen del curso (solo ADMIN)' })
+  updateCourseImage(@Param('id') id: string, @Body('image') image: string, @Request() req) {
+    return this.coursesService.updateImage(id, image, req.user);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Elimina un curso' })
-  @ApiResponse({ status: 200, description: 'Curso eliminado correctamente.' })
-  @ApiResponse({ status: 404, description: 'Curso no encontrado.' })
   remove(@Param('id') id: string, @Request() req) {
     return this.coursesService.remove(id, req.user);
   }
