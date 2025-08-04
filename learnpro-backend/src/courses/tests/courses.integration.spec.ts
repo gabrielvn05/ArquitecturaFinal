@@ -51,8 +51,6 @@ describe('Courses and Subscriptions Integration', () => {
     }).compile();
 
     coursesService = module.get<CoursesService>(CoursesService);
-    subscriptionService = module.get<SubscriptionService>(SubscriptionService);
-    prismaService = module.get<PrismaService>(PrismaService);
   });
 
   describe('Course Access Control', () => {

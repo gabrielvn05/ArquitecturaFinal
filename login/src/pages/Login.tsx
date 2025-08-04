@@ -33,7 +33,7 @@ const Login: React.FC = () => {
         setError(data.error || 'Error de autenticación');
       }
     } catch (err) {
-      setError('Error de conexión con el servidor');
+      setError('Error de conexión con el servidor', err);
     } finally {
       setLoading(false);
     }

@@ -9,9 +9,9 @@ import { AnnualSubscriptionStrategy } from './strategies/annual-subscription.str
 
 @Injectable()
 export class SubscriptionService {
-  private freeStrategy: FreeSubscriptionStrategy;
-  private monthlyStrategy: MonthlySubscriptionStrategy;
-  private annualStrategy: AnnualSubscriptionStrategy;
+  private readonly freeStrategy: FreeSubscriptionStrategy;
+  private readonly monthlyStrategy: MonthlySubscriptionStrategy;
+  private readonly annualStrategy: AnnualSubscriptionStrategy;
 
   constructor(private readonly prisma: PrismaService) {
     this.freeStrategy = new FreeSubscriptionStrategy(prisma);

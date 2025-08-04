@@ -36,7 +36,6 @@ describe('SubscriptionService - Strategy Pattern Tests', () => {
     }).compile();
 
     service = module.get<SubscriptionService>(SubscriptionService);
-    prismaService = module.get<PrismaService>(PrismaService);
   });
 
   it('should be defined', () => {

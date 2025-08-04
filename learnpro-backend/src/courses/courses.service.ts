@@ -3,13 +3,13 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { SubscriptionService } from '../subscriptions/subscription.service';
-import { SubscriptionType, Course } from '@prisma/client';
+import { SubscriptionType } from '@prisma/client';
 
 @Injectable()
 export class CoursesService {
   constructor(
-    private prisma: PrismaService,
-    private subscriptionService: SubscriptionService,
+    private readonly prisma: PrismaService,
+    private readonly subscriptionService: SubscriptionService,
   ) {}
 
   async create(dto: CreateCourseDto, user: any) {

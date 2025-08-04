@@ -115,7 +115,7 @@ const Courses: React.FC = () => {
         setUserSubscription(subscription);
       }
     } catch (err) {
-      console.log('Usuario sin suscripción activa');
+      console.log('Usuario sin suscripción activa', err);
     }
   };
 
