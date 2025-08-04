@@ -2,13 +2,9 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  plugins: [react({
-    jsxRuntime: 'classic' // Añade esta línea
-  })],
-  optimizeDeps: {
-    include: [
-      'react-dom/client',
-      "@paypal/react-paypal-js"
-    ]
+  plugins: [react()],
+  server: {
+    open: true,
+    port: 5173
   }
 })
