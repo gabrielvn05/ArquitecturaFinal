@@ -1,9 +1,6 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  build: {
-    outDir: 'dist', // Directorio de salida
-  },
   server: {
     proxy: {
       // Redirigir las solicitudes a tu backend de Render
