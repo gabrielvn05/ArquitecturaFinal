@@ -5,7 +5,8 @@ export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
     include: [
-      'react-dom/client'
+      'react-dom/client',
+      "@paypal/react-paypal-js"
     ]
   }
 })
