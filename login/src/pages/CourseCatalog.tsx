@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaPaypal, FaStripe } from 'react-icons/fa';
 import PaymentModal from '../components/PaymentModal';
 import PayPalModal from '../components/PayPalModal';
+import StripeModal from '../components/StripeModal';
 import ProgramacionBasica from '../assets/ProgramacionBasica.jpg';
 import JavaScriptAvanzado from '../assets/JavaScript-Avanzado.png';
 import Empresarial from '../assets/Empresarial.png';
@@ -46,6 +47,7 @@ const CourseCatalogPage: React.FC = () => {
   const [userRole, setUserRole] = useState<string>('STUDENT'); 
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isPayPalModalOpen, setIsPayPalModalOpen] = useState(false);
+  const [isStripeModalOpen, setIsStripeModalOpen] = useState(false);
   const [selectedPaymentPlan, setSelectedPaymentPlan] = useState<SubscriptionPlan | null>(null); 
 
   const handleLogout = () => {
@@ -229,7 +231,7 @@ const CourseCatalogPage: React.FC = () => {
 
   const handleStripePayment = (plan: SubscriptionPlan) => {
     setSelectedPaymentPlan(plan);
-    setIsPaymentModalOpen(true);
+    setIsStripeModalOpen(true);
   };
 
   const closePaymentModal = () => {
@@ -239,6 +241,11 @@ const CourseCatalogPage: React.FC = () => {
 
   const closePayPalModal = () => {
     setIsPayPalModalOpen(false);
+    setSelectedPaymentPlan(null);
+  };
+
+  const closeStripeModal = () => {
+    setIsStripeModalOpen(false);
     setSelectedPaymentPlan(null);
   };
 
@@ -254,7 +261,7 @@ const CourseCatalogPage: React.FC = () => {
     const requiredPlan = subscriptionPlans.find(plan => plan.type === course.subscriptionRequired);
     if (requiredPlan) {
       setSelectedPaymentPlan(requiredPlan);
-      setIsPaymentModalOpen(true);
+      setIsStripeModalOpen(true);
     }
   };
 
@@ -513,7 +520,16 @@ const CourseCatalogPage: React.FC = () => {
         />
       )}
 
-      {/* Modal de selección de métodos (para Stripe) */}
+      {/* Modal de Stripe directo */}
+      {selectedPaymentPlan && (
+        <StripeModal
+          isOpen={isStripeModalOpen}
+          onClose={closeStripeModal}
+          plan={selectedPaymentPlan}
+        />
+      )}
+
+      {/* Modal de selección de métodos (para casos especiales) */}
       {selectedPaymentPlan && (
         <PaymentModal
           isOpen={isPaymentModalOpen}

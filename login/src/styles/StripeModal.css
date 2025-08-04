@@ -1,0 +1,180 @@
+.stripe-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.stripe-modal {
+  background: white;
+  border-radius: 12px;
+  width: 350px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  animation: modalSlideIn 0.3s ease-out;
+  overflow: hidden;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px 8px 20px;
+}
+
+.stripe-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stripe-icon {
+  font-size: 1.4rem;
+  color: #635bff;
+}
+
+.modal-header h2 {
+  margin: 0;
+  color: #333;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  color: #999;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
+
+.close-btn:hover {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.payment-summary {
+  padding: 16px 20px;
+  text-align: center;
+  background: white;
+}
+
+.plan-info h3 {
+  margin: 0 0 6px 0;
+  color: #333;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.plan-description {
+  margin: 0 0 12px 0;
+  color: #666;
+  font-size: 0.85rem;
+  font-weight: normal;
+}
+
+.price-display {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.amount {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #635bff;
+}
+
+.stripe-payment-section {
+  padding: 16px 20px 20px 20px;
+  background: white;
+}
+
+.stripe-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card-element-container {
+  padding: 12px;
+  border: 1px solid #e0e6ed;
+  border-radius: 6px;
+  background: white;
+  transition: border-color 0.2s;
+}
+
+.card-element-container:focus-within {
+  border-color: #635bff;
+  box-shadow: 0 0 0 2px rgba(99, 91, 255, 0.1);
+}
+
+.stripe-pay-button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #635bff 0%, #4c46d6 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.stripe-pay-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 91, 255, 0.3);
+}
+
+.stripe-pay-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .stripe-modal {
+    width: 320px;
+    margin: 10px;
+  }
+  
+  .modal-header,
+  .payment-summary,
+  .stripe-payment-section {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  
+  .amount {
+    font-size: 1.6rem;
+  }
+}
