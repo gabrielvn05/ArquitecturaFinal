@@ -36,7 +36,7 @@ const UserProfilePage: React.FC = () => {
   setLoading(true);
   try {
     const token = localStorage.getItem('token'); // 👈 asumiendo que guardas el JWT aquí
-    const res = await fetch('http://localhost:3000/auth/me', {
+    const res = await fetch('https://arquitecturafinal.onrender.com/auth/me', {
       headers: {
         Authorization: `Bearer ${token}`
       }
