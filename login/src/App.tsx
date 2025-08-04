@@ -12,6 +12,8 @@ import UserProfile from './pages/UserProfile';
 import PrivateRoute from './PrivateRoute';
 
 const App: React.FC = () => {
+  const token = localStorage.getItem('token');
+
   return (
     <Router>
       <Routes>
@@ -19,66 +21,73 @@ const App: React.FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Rutas privadas */}
-        <Route
-          path="/"
-          element={
-            <PrivateRoute>
-              <Home />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/courses"
-          element={
-            <PrivateRoute>
-              <Courses />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/admin/users"
-          element={
-            <PrivateRoute>
-              <AdminUsers />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/admin/courses"
-          element={
-            <PrivateRoute>
-              <AdminCourses />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/admin/subscriptions"
-          element={
-            <PrivateRoute>
-              <AdminSubscriptions />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <PrivateRoute>
-              <UserProfile />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/catalog"
-          element={
-            <PrivateRoute>
-              <CourseCatalog />
-            </PrivateRoute>
-          }
-        />
+        {/* Redirigir al login si no hay token */}
+        {token ? (
+          <>
+            {/* Rutas privadas */}
+            <Route
+              path="/"
+              element={
+                <PrivateRoute>
+                  <Home />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/courses"
+              element={
+                <PrivateRoute>
+                  <Courses />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/users"
+              element={
+                <PrivateRoute>
+                  <AdminUsers />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/courses"
+              element={
+                <PrivateRoute>
+                  <AdminCourses />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/subscriptions"
+              element={
+                <PrivateRoute>
+                  <AdminSubscriptions />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <PrivateRoute>
+                  <UserProfile />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/catalog"
+              element={
+                <PrivateRoute>
+                  <CourseCatalog />
+                </PrivateRoute>
+              }
+            />
+          </>
+        ) : (
+          <Route path="*" element={<Navigate to="/login" />} /> // Redirigir a login si no hay token
+        )}
 
         {/* Redirección inteligente */}
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>
   );
