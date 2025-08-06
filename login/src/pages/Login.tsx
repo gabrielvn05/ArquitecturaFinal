@@ -16,31 +16,32 @@ const Login: React.FC = () => {
     setLoading(true);
 
     try {
-      const res = await fetch('https://arquitecturafinal.onrender.com/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
+  const res = await fetch('https://arquitecturafinal.onrender.com/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  });
 
-      const data = await res.json();
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    throw new Error('Respuesta no válida del servidor');
+  }
 
-      if (res.ok && data.access_token) {
-        // ✅ Guardar sesión
-        localStorage.setItem('token', data.access_token);
-        localStorage.setItem('userRole', data.user?.role || 'STUDENT');
-        localStorage.setItem('userName', data.user?.name || email);
+  if (res.ok && data.access_token) {
+    localStorage.setItem('token', data.access_token);
+    localStorage.setItem('userRole', data.user?.role || 'STUDENT');
+    localStorage.setItem('userName', data.user?.name || email);
+    navigate('/', { replace: true });
+  } else {
+    setError(data.message || `Error ${res.status}: ${res.statusText}`);
+  }
+} catch (err) {
+  console.error('❌ Error de conexión:', err);
+  setError('Error de conexión con el servidor');
+}
 
-        // ✅ Redirigir al home
-        navigate('/', { replace: true });
-      } else {
-        setError(data.message || 'Credenciales inválidas');
-      }
-    } catch (err) {
-      console.error('❌ Error de conexión:', err);
-      setError('Error de conexión con el servidor');
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
