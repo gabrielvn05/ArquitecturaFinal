@@ -47,7 +47,7 @@ const AdminSubscriptionsPage: React.FC = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/subscriptions/plans', {
+      const response = await fetch('https://arquitecturafinal.onrender.com/subscriptions/plans', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -92,7 +92,7 @@ const AdminSubscriptionsPage: React.FC = () => {
   const handleToggleSubscription = async (subscriptionId: string) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3000/subscriptions/${subscriptionId}/cancel`, {
+      const response = await fetch(`https://arquitecturafinal.onrender.com/subscriptions/${subscriptionId}/cancel`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,

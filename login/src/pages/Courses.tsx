@@ -44,7 +44,7 @@ interface SubscriptionPlan {
   features: string[];
 }
 
-const API_BASE = 'http://localhost:3000'; // Cambia según tu backend
+const API_BASE = 'https://arquitecturafinal.onrender.com'; // Cambia según tu backend
 
 const Courses: React.FC = () => {
   const navigate = useNavigate();

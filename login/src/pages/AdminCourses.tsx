@@ -42,7 +42,7 @@ const AdminCoursesPage: React.FC = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/courses', {
+      const response = await fetch('https://arquitecturafinal.onrender.com/courses', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -66,7 +66,7 @@ const AdminCoursesPage: React.FC = () => {
   const fetchInstructors = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/users?role=INSTRUCTOR', {
+      const response = await fetch('https://arquitecturafinal.onrender.com/users?role=INSTRUCTOR', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -87,7 +87,7 @@ const AdminCoursesPage: React.FC = () => {
   const handleCreateCourse = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/courses', {
+      const response = await fetch('https://arquitecturafinal.onrender.com/courses', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -126,7 +126,7 @@ const AdminCoursesPage: React.FC = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3000/courses/${editingCourse.id}`, {
+      const response = await fetch(`https://arquitecturafinal.onrender.com/courses/${editingCourse.id}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -157,7 +157,7 @@ const AdminCoursesPage: React.FC = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3000/courses/${courseId}`, {
+      const response = await fetch(`https://arquitecturafinal.onrender.com/courses/${courseId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

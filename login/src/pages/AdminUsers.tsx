@@ -31,7 +31,7 @@ const AdminUsersPage: React.FC = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/users', {
+      const response = await fetch('https://arquitecturafinal.onrender.com/users', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -55,7 +55,7 @@ const AdminUsersPage: React.FC = () => {
   const handleRoleChange = async (userId: string, newRole: string) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3000/users/${userId}`, {
+      const response = await fetch(`https://arquitecturafinal.onrender.com/users/${userId}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -83,7 +83,7 @@ const AdminUsersPage: React.FC = () => {
   const handleToggleStatus = async (userId: string) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3000/users/${userId}/toggle-status`, {
+      const response = await fetch(`https://arquitecturafinal.onrender.com/users/${userId}/toggle-status`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -110,7 +110,7 @@ const AdminUsersPage: React.FC = () => {
   const handleCreateUser = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/auth/register', {
+      const response = await fetch('https://arquitecturafinal.onrender.com/auth/register', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
