@@ -16,23 +16,27 @@ const Login: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('https://arquitecturafinal.onrender.com/auth/login', {
+      const res = await fetch('https://arquitecturafinal.onrender.com/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
+      const data = await res.json();
 
-      if (data.access_token) {
+      if (res.ok && data.access_token) {
+        // ✅ Guardar sesión
         localStorage.setItem('token', data.access_token);
         localStorage.setItem('userRole', data.user?.role || 'STUDENT');
         localStorage.setItem('userName', data.user?.name || email);
-        navigate('/'); // redirige al dashboard
+
+        // ✅ Redirigir al home
+        navigate('/', { replace: true });
       } else {
-        setError(data.error || 'Error de autenticación');
+        setError(data.message || 'Credenciales inválidas');
       }
     } catch (err) {
+      console.error('❌ Error de conexión:', err);
       setError('Error de conexión con el servidor');
     } finally {
       setLoading(false);
@@ -43,7 +47,6 @@ const Login: React.FC = () => {
     <div className="login-container">
       <form className="login-form" onSubmit={handleSubmit}>
         <h2>Iniciar sesión</h2>
-        
         <input
           type="email"
           placeholder="Correo electrónico"

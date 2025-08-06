@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -12,7 +12,14 @@ import UserProfile from './pages/UserProfile';
 import PrivateRoute from './PrivateRoute';
 
 const App: React.FC = () => {
-  const token = localStorage.getItem('token');
+  const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
+
+  // 🔹 Escucha cambios en el token de localStorage
+  useEffect(() => {
+    const handleStorageChange = () => setToken(localStorage.getItem('token'));
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   return (
     <Router>
@@ -21,73 +28,23 @@ const App: React.FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Redirigir al login si no hay token */}
+        {/* Si hay token, renderiza las rutas privadas */}
         {token ? (
           <>
-            {/* Rutas privadas */}
-            <Route
-              path="/"
-              element={
-                <PrivateRoute>
-                  <Home />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/courses"
-              element={
-                <PrivateRoute>
-                  <Courses />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/admin/users"
-              element={
-                <PrivateRoute>
-                  <AdminUsers />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/admin/courses"
-              element={
-                <PrivateRoute>
-                  <AdminCourses />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/admin/subscriptions"
-              element={
-                <PrivateRoute>
-                  <AdminSubscriptions />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <PrivateRoute>
-                  <UserProfile />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/catalog"
-              element={
-                <PrivateRoute>
-                  <CourseCatalog />
-                </PrivateRoute>
-              }
-            />
+            <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
+            <Route path="/courses" element={<PrivateRoute><Courses /></PrivateRoute>} />
+            <Route path="/admin/users" element={<PrivateRoute><AdminUsers /></PrivateRoute>} />
+            <Route path="/admin/courses" element={<PrivateRoute><AdminCourses /></PrivateRoute>} />
+            <Route path="/admin/subscriptions" element={<PrivateRoute><AdminSubscriptions /></PrivateRoute>} />
+            <Route path="/profile" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
+            <Route path="/catalog" element={<PrivateRoute><CourseCatalog /></PrivateRoute>} />
           </>
         ) : (
-          <Route path="*" element={<Navigate to="/login" />} /> // Redirigir a login si no hay token
+          <Route path="*" element={<Navigate to="/login" replace />} />
         )}
 
-        {/* Redirección inteligente */}
-        <Route path="*" element={<Navigate to="/login" />} />
+        {/* Redirección catch-all */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>
   );
