@@ -5,17 +5,16 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Configuración crítica para Render
   const port = process.env.PORT || 3000;
-  const host = '0.0.0.0'; // ¡Esencial para Render!
+  const host = '0.0.0.0';
 
-  // CORS - Ajusta según tus necesidades
+  // ✅ CORS corregido
   app.enableCors({
-    origin: process.env.FRONTEND_URL || 'https://arquitectura-final.vercel.app/',
+    origin: process.env.FRONTEND_URL || 'https://arquitectura-final.vercel.app',
     credentials: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   });
 
-  // Configuración de Swagger
   const config = new DocumentBuilder()
     .setTitle('LearnPro API')
     .setDescription('La API de LearnPro para la gestión de cursos y usuarios')
@@ -29,9 +28,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  // Iniciar servidor
   await app.listen(port, host);
   console.log(`🚀 Servidor ejecutándose en http://${host}:${port}`);
 }
-
 bootstrap();
