@@ -1,16 +1,16 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-   build: {
-    outDir: 'dist', // Asegúrate de que los archivos de salida estén en dist
+  build: {
+    outDir: 'dist', // carpeta de salida correcta
     rollupOptions: {
-      input: '/index.html', // Asegúrate de que el archivo HTML sea el correcto
-    },},
+      input: 'index.html', // sin la barra inicial
+    },
+  },
   server: {
     proxy: {
-      // Redirigir las solicitudes a tu backend de Render
       '/api': {
-        target: 'https://arquitecturafinal.onrender.com', // URL de tu backend en Render
+        target: 'https://arquitecturafinal.onrender.com',
         changeOrigin: true,
         secure: false,
       },
